@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, User } from 'lucide-react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useNavigate } from 'react-router-dom';
 
 interface AdminLoginProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ const AdminLogin = ({ isOpen, onClose }: AdminLoginProps) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ const AdminLogin = ({ isOpen, onClose }: AdminLoginProps) => {
       await signInWithEmailAndPassword(auth, email, password);
       console.log('Admin logged in successfully');
       onClose();
+      navigate('/admin'); // Navigate to admin page after successful login
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed. Please check your credentials.');
@@ -37,6 +40,7 @@ const AdminLogin = ({ isOpen, onClose }: AdminLoginProps) => {
     try {
       await signOut(auth);
       console.log('Admin logged out');
+      navigate('/'); // Navigate back to home after logout
     } catch (error) {
       console.error('Logout failed:', error);
     }
